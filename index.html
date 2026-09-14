@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
+
+  <title>EDPC Dough</title>
+
+  <meta
+    name="theme-color"
+    content="#071C22"
+  >
+
+  <meta
+    name="description"
+    content="EDPC Dough Production App"
+  >
+
+  <meta
+    name="mobile-web-app-capable"
+    content="yes"
+  >
+
+  <meta
+    name="apple-mobile-web-app-capable"
+    content="yes"
+  >
+
+  <meta
+    name="apple-mobile-web-app-status-bar-style"
+    content="black-translucent"
+  >
+
+  <meta
+    name="apple-mobile-web-app-title"
+    content="EDPC Dough"
+  >
+
+  <link
+    rel="manifest"
+    href="manifest.json"
+  >
+
+  <link
+    rel="icon"
+    type="image/png"
+    sizes="192x192"
+    href="icon-192.png"
+  >
+
+  <link
+    rel="icon"
+    type="image/png"
+    sizes="512x512"
+    href="icon-512.png"
+  >
+
+  <link
+    rel="apple-touch-icon"
+    href="icon-192.png"
+  >
+
+
+  <style>
+
+    :root {
+      --dark: #071C22;
+      --orange: #FE7F41;
+      --aqua: #B1E4E3;
+      --cream: #FFF8EF;
+    }
+
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: var(--dark);
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+    }
+
+
+    body {
+      min-height: 100dvh;
+    }
+
+
+    #appShell {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100dvh;
+      background: var(--dark);
+    }
+
+
+    #doughApp {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: var(--cream);
+    }
+
+
+    #loadingScreen {
+      position: absolute;
+      inset: 0;
+      z-index: 20;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      background: var(--dark);
+
+      color: white;
+
+      transition:
+        opacity 0.25s ease,
+        visibility 0.25s ease;
+    }
+
+
+    #loadingScreen.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+
+    .brand {
+      text-align: center;
+      padding: 24px;
+    }
+
+
+    .bolt {
+      font-size: 56px;
+      line-height: 1;
+      margin-bottom: 12px;
+      color: var(--orange);
+    }
+
+
+    .title {
+      font-size: 34px;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+
+
+    .title span {
+      color: var(--orange);
+    }
+
+
+    .subtitle {
+      margin-top: 6px;
+      color: var(--aqua);
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 3px;
+    }
+
+
+    .loader {
+      width: 48px;
+      height: 48px;
+
+      margin-top: 30px;
+
+      border: 5px solid rgba(255, 255, 255, 0.18);
+      border-top-color: var(--orange);
+      border-radius: 50%;
+
+      animation: spin 0.8s linear infinite;
+    }
+
+
+    @keyframes spin {
+
+      to {
+        transform: rotate(360deg);
+      }
+
+    }
+
+
+    #fallback {
+      display: none;
+
+      position: absolute;
+      inset: 0;
+
+      z-index: 30;
+
+      padding: 30px;
+
+      align-items: center;
+      justify-content: center;
+
+      text-align: center;
+
+      background: var(--dark);
+      color: white;
+    }
+
+
+    #fallback.show {
+      display: flex;
+    }
+
+
+    .fallback-card {
+      width: 100%;
+      max-width: 430px;
+
+      padding: 28px;
+
+      border-radius: 22px;
+
+      background: var(--cream);
+      color: var(--dark);
+    }
+
+
+    .fallback-card h1 {
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+
+
+    .fallback-card p {
+      font-size: 16px;
+      line-height: 1.5;
+      margin-bottom: 22px;
+    }
+
+
+    .open-button {
+      display: block;
+
+      width: 100%;
+
+      padding: 16px 18px;
+
+      border: none;
+      border-radius: 14px;
+
+      background: var(--orange);
+      color: var(--dark);
+
+      font-size: 17px;
+      font-weight: 900;
+
+      text-decoration: none;
+    }
+
+
+    @media (display-mode: standalone) {
+
+      body {
+        overscroll-behavior: none;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+  <div id="appShell">
+
+    <iframe
+      id="doughApp"
+      title="EDPC Dough Production App"
+      src="https://script.google.com/a/macros/culivino.com/s/AKfycbwPVGeRKzhUAKOhuVMUJ5DOOWjfZDlJtHDSO0hRhEp5_erXcJRi8gddcBYWUdHQGf1c/exec"
+      allow="clipboard-read; clipboard-write"
+    ></iframe>
+
+
+    <div id="loadingScreen">
+
+      <div class="brand">
+
+        <div class="bolt">
+          ⚡
+        </div>
+
+        <div class="title">
+          EDPC <span>DOUGH</span>
+        </div>
+
+        <div class="subtitle">
+          PRODUCTION
+        </div>
+
+        <div class="loader"></div>
+
+      </div>
+
+    </div>
+
+
+    <div id="fallback">
+
+      <div class="fallback-card">
+
+        <h1>EDPC Dough</h1>
+
+        <p>
+          The Dough App could not load inside the installed app.
+          Open it directly to continue.
+        </p>
+
+        <a
+          class="open-button"
+          href="https://script.google.com/a/macros/culivino.com/s/AKfycbwPVGeRKzhUAKOhuVMUJ5DOOWjfZDlJtHDSO0hRhEp5_erXcJRi8gddcBYWUdHQGf1c/exec"
+        >
+          Open Dough App
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+    const doughApp =
+      document.getElementById(
+        'doughApp'
+      );
+
+
+    const loadingScreen =
+      document.getElementById(
+        'loadingScreen'
+      );
+
+
+    const fallback =
+      document.getElementById(
+        'fallback'
+      );
+
+
+    let appLoaded =
+      false;
+
+
+    doughApp.addEventListener(
+      'load',
+      function () {
+
+        appLoaded =
+          true;
+
+
+        setTimeout(
+          function () {
+
+            loadingScreen
+              .classList
+              .add(
+                'hidden'
+              );
+
+          },
+          350
+        );
+
+      }
+    );
+
+
+    setTimeout(
+      function () {
+
+        if (
+          !appLoaded
+        ) {
+
+          loadingScreen
+            .classList
+            .add(
+              'hidden'
+            );
+
+
+          fallback
+            .classList
+            .add(
+              'show'
+            );
+
+        }
+
+      },
+      12000
+    );
+
+
+    if (
+      'serviceWorker' in navigator
+    ) {
+
+      window.addEventListener(
+        'load',
+        function () {
+
+          navigator
+            .serviceWorker
+            .register(
+              './service-worker.js'
+            )
+            .catch(
+              function (error) {
+
+                console.log(
+                  'Service worker registration failed:',
+                  error
+                );
+
+              }
+            );
+
+        }
+      );
+
+    }
+
+  </script>
+
+</body>
+
+</html>
